@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
 
 // get one product
 router.get('/:id', (req, res) => {
-  Category.findOne({
+  Product.findOne({
     where: {
       id: req.params.id
     },
@@ -123,7 +123,20 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
+  Product.destroy(req.body, {
+    where: {
+      id: req.params.id
+    }
+  })
+  .then(dbProductData => res.json(dbProductData))
+  if(!dbProductData){
+    res.status(404).json({ message: 'Error! No Product Found!'})
+  }
+  res.json(dbProductData)
+  .catch(err => {
+    console.log(err)
+    res.status(500).json(err)
+  })
 });
 
 module.exports = router;
