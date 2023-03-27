@@ -34,14 +34,15 @@ router.get('/:id', (req, res) => {
   }).then(dbTagData => {
     if(!dbTagData){
       res.status(404).json({ message: 'Error! No tag found!'})
+      return
     }
-    res.json(dbTagData)
+    res.json(dbTagData);
+  })
     .catch(err => {
       console.log(err)
       res.status(500).json(err);
     })
-  })
-});
+  });
 
 router.post('/', (req, res) => {
   Tag.create({
@@ -63,14 +64,15 @@ router.put('/:id', (req, res) => {
   .then(dbTagData => {
     if(!dbTagData[0]){
       res.status(404).json({ message: 'Error! No tag found!'})
+      return
     }
     res.json(dbTagData)
+  })
     .catch(err => {
       console.log(err)
       res.status(500).json(err);
     })
-  })
-});
+  });
 
 router.delete('/:id', (req, res) => {
  Tag.destroy(req.body, {
@@ -78,11 +80,12 @@ router.delete('/:id', (req, res) => {
     id: req.params.id
   }
  })
- .then(dbTagData => res.json(dbTagData))
- if(!dbTagData){
+ .then(dbTagData => { if(!dbTagData){
   res.status(404).json({ message: 'Error! No tag found!'})
+  return
  }
- res.json(dbTagData)
+ res.json(dbTagData);
+})
  .catch(err => {
   console.log(err)
   res.status(500).json(err);
