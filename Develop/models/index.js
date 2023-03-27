@@ -20,7 +20,7 @@ Product.belongsToMany(Tag,
     foriegnKey: 'product_id'
   });
 // Tags belongToMany Products (through ProductTag)
-Tag.belongsToMany(Tag, 
+Tag.belongsToMany(Product, 
   {
     through: 'ProductTag',
     foriegnKey: 'tag_id'

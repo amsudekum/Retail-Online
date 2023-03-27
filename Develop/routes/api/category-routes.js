@@ -31,14 +31,16 @@ router.get('/:id', (req, res) => {
         attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
       }
     ]
-  }).then(dbCategoryData => res.json(dbCategoryData))
+  }).then(dbCategoryData => { 
     if(!dbCategoryData){
-      res.status(404).json({ message: 'Error! No category with this id!'})
-    }
-    res.json(dbCategoryData)
-    .catch(err => {
-    console.log(err)
-    res.status(500).json(err);
+    res.status(404).json({ message: 'Error! No category with this id!'})
+    return
+  }
+  res.json(dbCategoryData);
+  })
+  .catch(err => {
+  console.log(err)
+  res.status(500).json(err);
   })
 });
 
@@ -59,32 +61,36 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   })
-    .then(dbCategoryData => res.json(dbCategoryData))
-    if(!dbCategoryData){
-    res.status(404).json({ message: 'Error! No category with this id!'})
-      }
-    res.json(dbCategoryData)
-    .catch(err => {
-    console.log(err)
-    res.status(500).json(err);
-})
+    .then(dbCategoryData => {
+      if(!dbCategoryData[0]){
+        res.status(404).json({ message: 'Error! No category with this id!'})
+        return
+          }
+        res.json(dbCategoryData)
+        .catch(err => {
+        console.log(err)
+        res.status(500).json(err);
+    })
+    })
 });
 
 router.delete('/:id', (req, res) => {
-  Category.destroy(req.body, {
+  Category.destroy({
     where: {
       id: req.params.id
     }
   })
-    .then(dbCategoryData => res.json(dbCategoryData))
-    if(!dbCategoryData){
+    .then(dbCategoryData => {
+       if(!dbCategoryData){
     res.status(404).json({ message: 'Error! No category with this id!'})
+    return
       }
-    res.json(dbCategoryData)
+    res.json(dbCategoryData);
+    })
     .catch(err => {
     console.log(err)
     res.status(500).json(err);
 })
-});
+    });
 
 module.exports = router;

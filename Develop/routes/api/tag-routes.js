@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
         attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
       }
     ]
-  }).then(dbTagData => res.json(dbTagData))
+  }).then(dbTagData => {
     if(!dbTagData){
       res.status(404).json({ message: 'Error! No tag found!'})
     }
@@ -40,6 +40,7 @@ router.get('/:id', (req, res) => {
       console.log(err)
       res.status(500).json(err);
     })
+  })
 });
 
 router.post('/', (req, res) => {
@@ -59,14 +60,15 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   })
-  .then(dbTagData => res.json(dbTagData))
-  if(!dbTagData){
-    res.status(404).json({ message: 'Error! No tag found!'})
-  }
-  res.json(dbTagData)
-  .catch(err => {
-    console.log(err)
-    res.status(500).json(err);
+  .then(dbTagData => {
+    if(!dbTagData[0]){
+      res.status(404).json({ message: 'Error! No tag found!'})
+    }
+    res.json(dbTagData)
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err);
+    })
   })
 });
 
