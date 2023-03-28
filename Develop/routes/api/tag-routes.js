@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Tag, Product, ProductTag, Category } = require('../../models');
 
-// The `/api/tags` endpoint
+
 
 router.get('/', (req, res) => {
   Tag.findAll({
@@ -48,10 +48,10 @@ router.post('/', (req, res) => {
   Tag.create({
     tag_name: req.body.tag_name
   })
-  .then(dbTagData => res,json(dbTagData))
+  .then(dbTagData => res.json(dbTagData))
   .catch(err => {
     console.log(err);
-    res.status(500).json(err);
+    res.status(500).json(err)
   })
 });
 
@@ -75,14 +75,15 @@ router.put('/:id', (req, res) => {
   });
 
 router.delete('/:id', (req, res) => {
- Tag.destroy(req.body, {
+ Tag.destroy({
   where: {
     id: req.params.id
   }
  })
- .then(dbTagData => { if(!dbTagData){
-  res.status(404).json({ message: 'Error! No tag found!'})
-  return
+ .then(dbTagData => { 
+    if(!dbTagData){
+    res.status(404).json({ message: 'Error! No tag found!'})
+   return
  }
  res.json(dbTagData);
 })
